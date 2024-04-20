@@ -1,6 +1,5 @@
 "use client";
 
-import axios from "axios";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -8,141 +7,32 @@ import { useState } from "react";
 
 
 
-export default function SignUp() {
-  const [isLoading, setIsLoading] = useState(false);
-  const toggleLogin = () => setIsLoading((prev) => !prev);
-
-  const [user,setUser]= useState({name:"", email:"", password:""});
-  const [user2,setUser2]= useState({ email:"", password:""});
+export default function Login() {
+  
+  const [user,setUser]= useState({ email:"", password:""});
  const router = useRouter()
 
  const handleInputChange=(e)=>{
    const {name, value} =e.target;
   setUser((prev)=>({...prev,[name]:value}));
  };
-
- const handleSubmit = async(e)=>{
-  e.preventDefault();
-  try {
-    const res =await axios.post("/api/register",user)
-    if (res.status ===200 || res.status ===201) {
-      router.push("/")
-    }
-    
-  } catch (error) {
-    console.log(error);
-  }
-
- }
-
- const handleSubmit2 = async (e) => {
+ const handleSubmit = async (e) => {
   e.preventDefault();
   try {
     const res = await signIn("credentials", {
-      email: user2.email,
-      password: user2.password,
+      email: user.email,
+      password: user.password,
       redirect: false,
-    });
-    if (res.status === 200 || res.status === 201) {
-      router.push("/")
-    }
+    })
+      router.replace("/")
   } catch (error) {
     console.log(error);
   }
 };
   return (
-    <div>
+    
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-       {isLoading ? (
-        <>
-         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-         <img
-           className="mx-auto h-10 w-auto"
-           src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-           alt="Your Company"
-         />
-         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-           Create an account
-         </h2>
-       </div>
-
-       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-         <form className="space-y-6" onSubmit={handleSubmit} >
-
-         <div>
-             <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">
-               Name
-             </label>
-             <div className="mt-2">
-               <input
-               value={user.name}
-               onChange={handleInputChange}
-                 id="name"
-                 name="name"
-                 type="text"
-                 required
-                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-               />
-             </div>
-           </div>
-
-           <div>
-             <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-               Email address
-             </label>
-             <div className="mt-2">
-               <input
-               value={user.email}
-               onChange={handleInputChange}
-                 id="email"
-                 name="email"
-                 type="email"
-                 autoComplete="email"
-                 required
-                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-               />
-             </div>
-           </div>
-
-           <div>
-             <div className="flex items-center justify-between">
-               <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
-                 Password
-               </label>
-               
-             </div>
-             <div className="mt-2">
-               <input
-               value={user2.password}
-               onChange={handleInputChange}
-                 id="password"
-                 name="password"
-                 type="password"
-                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-               />
-             </div>
-           </div>
-
-           <div>
-             <button
-               type="submit"
-               className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-             >
-               Sign Up
-             </button>
-           </div>
-         </form>
-
-         <p className="mt-10 text-center text-sm text-gray-500">
-           Already an Account?{' '}
-           <Link onClick={toggleLogin} href="/signup" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
-             Login
-           </Link>
-         </p>
-       </div>
-       </>
-       ) : (
-        <>
+       
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
             className="mx-auto h-10 w-auto"
@@ -155,14 +45,14 @@ export default function SignUp() {
         </div>
       
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form onSubmit={handleSubmit2} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                 Email address
               </label>
               <div className="mt-2">
               <input
-               value={user2.email}
+               value={user.email}
                onChange={handleInputChange}
                  id="email"
                  name="email"
@@ -182,7 +72,7 @@ export default function SignUp() {
               </div>
               <div className="mt-2">
                 <input 
-                value={user2.password}
+                value={user.password}
                 onChange={handleInputChange}
                 type="text" 
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -209,16 +99,13 @@ export default function SignUp() {
       
           <p className="mt-10 text-center text-sm text-gray-500">
             Create an account{' '}
-            <Link onClick={toggleLogin} href="/signup" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+            <Link  href="/signup" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
               Sign Up
             </Link>
           </p>
         </div>
-      </>
-      
-       )
-       }
+
       </div>
-    </div>
+    
   )
 }
